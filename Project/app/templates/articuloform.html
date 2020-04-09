@@ -1,0 +1,132 @@
+{% extends "template1.html" %}
+{% block title %}Crear/Actualizar{% endblock %}
+
+
+{% block content %}
+<!-- TEMPLATE USADO PARA CREATE, UPDATE -->
+<div class="container">
+    <div class="row">
+        <div class="col-6 p-5 pr-5 pd-5">
+            <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
+            <form action={% if request.args %}"{{url_for('update_form')}}?id={{juego.id}}"
+                {% else %}'{{url_for("create_form")}}'{% endif %} method="POST" class="shadow-lg"
+                enctype="multipart/form-data">
+                {{form.csrf_token()}}
+                <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">
+
+                    <div class="row">
+                        <div class="col-4">{{form.nombre.label}}</div>
+                        <div class="col-6">{{form.nombre( class="form-control", size="25")}}
+                            {% if form.nombre.errors %}
+                            {% for error in form.nombre.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.precio.label()}}</div>
+                        <div class="col-6 dflex justify-content-start text-white">
+                            {{form.precio(class="form-control", size="25")}}
+                            {% if form.precio.errors %}
+                            {% for error in form.precio.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.stock.label()}}</div>
+                        <div class="col-6 dflex justify-content-start">
+                            {{form.stock(class="form-control", size="25")}}
+                            {% if form.stock.errors %}
+                            {% for error in form.stock.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.descripcion.label()}}</div>
+                        <div class="col-6 dflex justify-content-start">{% if request.args %}
+                            {{form.descripcion(value=juego.descripcion ,
+                                                cols="21",
+                                                rows="10",
+                                                class="form-control")}}
+                            {% else %}{{form.descripcion(
+                                                cols="21",
+                                                rows="10",
+                                                class="form-control")}}{% endif %}
+                            {% if form.descripcion.errors %}
+                            {% for error in form.descripcion.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.imagen.label()}}</div>
+                        <div class="col-2 dflex justify-content-start">
+                            {{form.imagen(class="rounded")}}
+                            {% if form.imagen.errors %}
+                            {% for error in form.imagen.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.CategoriaId.label()}}</div>
+                        <div class="col-2 dflex justify-content-start">
+                            {{form.CategoriaId(class="rounded")}}
+                            {% if form.CategoriaId.errors %}
+                            {% for error in form.CategoriaId.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-2 dflex justify-content-start">{{form.submit()}}</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
