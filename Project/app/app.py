@@ -2,13 +2,16 @@ from flask import Flask, render_template,jsonify,Response, request, url_for, red
 from flask_bootstrap import Bootstrap
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.utils import secure_filename
-from app.login import set_login, set_logout
+# from app.login import set_login, set_logout
+from flask_login import LoginManager,login_user,logout_user,current_user, login_required
 import json
 import os
 
 app = Flask(__name__)
 app.config.from_pyfile("config.py")
 db = SQLAlchemy(app)
+login_manager=LoginManager(app)
+login_manager.login_view="log_in"
 
 Bootstrap(app) 
 
@@ -129,7 +132,10 @@ def filter_articulos(cid):
 #, travez
 
 @app.route("/inicio/create/form/", methods=["GET","POST"])
+@login_required
 def create_form():
+    if not current_user.is_admin():
+        abort(404, "no es admin, no tiene permiso")
     # instancio el formulario
     form=CreateForm()
     # verifico la informacion enviada segun lo estipulado en tipos de campos y validadores
@@ -210,7 +216,12 @@ def create_form():
 #             return render_template("template6.html",form=form, request=request, juego=juego)
 
 @app.route("/inicio/update/articulos/", methods=["GET","POST"])
+@login_required
 def update_form():
+    #control de permiso de admin
+    if not current_user.is_admin():
+        abort(404, "no es admin, no tiene permiso")
+
     id=request.args.get("id")
     juego=Articulos.query.get(id)
     form=CreateForm(obj=juego)
@@ -235,7 +246,12 @@ def update_form():
 
             
 @app.route("/inicio/create/categorias/", methods=["GET","POST"])
+@login_required
 def create_cat():
+
+    if not current_user.is_admin():
+        abort(404, "no es admin, no tiene permiso")
+
     form=CreateCat()
     
     if form.validate_on_submit():
@@ -249,7 +265,12 @@ def create_cat():
 
    
 @app.route("/inicio/delete/articulos/<int:id>", methods=["GET","POST"])
+@login_required
 def delete_articulo(id):
+
+    if not current_user.is_admin():
+        abort(404, "no es admin, no tiene permiso")
+
     form=DeleteForm()
     juego=Articulos.query.get(id)
     if juego==None:
@@ -267,7 +288,12 @@ def delete_articulo(id):
     return render_template("deleteformjuego.html",id=id,juego=juego, form=form)
 
 @app.route("/inicio/delete/categorias/<int:id>", methods=["GET","POST"])
+@login_required
 def delete_categoria(id):
+
+    if not current_user.is_admin():
+        abort(404, "no es admin, no tiene permiso")
+
     form=DeleteForm()
     cat=Categorias.query.get(id)
     if cat==None:
@@ -289,6 +315,9 @@ def delete_categoria(id):
 
 @app.route("/signin/", methods=['GET','POST'])
 def signin():
+    if current_user.is_authenticated:
+        return redirect(url_for("view_inicio"))
+
     form= SigninForm()
     if form.validate_on_submit():
         print("comprobacion de usuario")
@@ -304,6 +333,7 @@ def signin():
             nuevo_usuario.admin=False
             db.session.add(nuevo_usuario)
             db.session.commit()
+            return redirect(url_for("view_inicio"))
         else:
             print("usuario existe")
             existe=True
@@ -314,7 +344,12 @@ def signin():
 # login
 @app.route("/login/", methods=['GET','POST'])
 def log_in():
+    
+    if current_user.is_authenticated:
+        abort(404, "ya esta logueado")
+    
     form=LoginForm()
+
     if form.validate_on_submit():
         usuario=Usuarios.query.filter_by(username=form.username.data).first()
         if usuario==None:
@@ -322,20 +357,23 @@ def log_in():
             return render_template("login.html", form =form, url='log_in')
         print(form.data)
         if usuario.verify_password(form.password.data):
-            set_login(usuario)
+            login_user(usuario)
             return redirect(url_for("view_inicio"))
         else:
             form.password.errors.append("Contraseña incorrecta, por favor intente de nuevo")
     return render_template("login.html", form =form, url='log_in')
 
 @app.route("/logout/", methods=['GET','POST'])
+
 def log_out():
-    set_logout()
+    user=Usuarios.query
+    logout_user()
     return redirect(url_for("view_inicio"))
 
 
 
 @app.route("/editar/perfil/<int:id_usuario>", methods=["GET","POST"])
+@login_required
 def editar_perfil(id_usuario):
     usuario=Usuarios.query.get(id_usuario)
     form=SigninForm(request.form,obj=usuario)
@@ -349,7 +387,7 @@ def editar_perfil(id_usuario):
         try:
             Usuarios.query.filter_by(id=id_usuario).update(data_form)
             db.session.commit()
-            set_login(usuario)
+            login_user(usuario)
             return redirect(url_for('view_inicio'))
         except:
             form.username.errors.append("username ya existente")
@@ -357,6 +395,7 @@ def editar_perfil(id_usuario):
     return render_template("signin.html", form=form, editar=True, url="editar_perfil")
 
 @app.route("/editar/contraseña/<int:id_usuario>", methods=['GET','POST'])
+@login_required
 def editar_contraseña(id_usuario):
     form=CambiarContraseña()
     usuario=Usuarios.query.get(id_usuario)
@@ -374,3 +413,6 @@ def editar_contraseña(id_usuario):
         return redirect(url_for("view_inicio"))
     return render_template("cambiarcontraseña.html", form=form)
 
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuarios.query.get(int(user_id))

@@ -44,6 +44,23 @@ class Usuarios(db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash,password)
+    
+    #Requisito en el modelo usuario para integrar con Flask-Login
+    @property
+    def is_authenticated(self):
+        return True 
+    @property
+    def is_anonymous(self):
+        return False
+    @property
+    def is_active(self):
+        return True
+    #metodo requisito
+    def get_id(self):
+        return self.id
+    #extra, NO requisito para Flask login
+    def is_admin(self):
+        return self.admin
 
 
 
