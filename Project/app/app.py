@@ -105,7 +105,8 @@ def delete(e,k,v):
 def view_inicio():
     articulos=Articulos.query.all()
     cat_list=Categorias.query.all()
-    return render_template('inicio.html', articulos=articulos, Categorias=cat_list)
+    print(current_user.is_authenticated)
+    return render_template('inicio.html', articulos=articulos, Categorias=cat_list, current_user=current_user)
 
 #usado por opcion inicion para retornar una lista filtrada de articulos segun la categoria seleccionada
 @app.route("/inicio/filterby/categoria/<int:cid>")
@@ -360,7 +361,7 @@ def log_in():
             print("LOGUEADO?")
             login_user(usuario)
             print(f"RESPUESTA:{current_user.is_authenticated}")
-            return redirect(url_for("view_categorias"))
+            return redirect(url_for("view_inicio"))
         else:
             form.password.errors.append("Contraseña incorrecta, por favor intente de nuevo")
     return render_template("login.html", form =form, url='log_in')
