@@ -9,7 +9,7 @@
         <div class="col-6 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
             {% if editar%}
-            <form action={{url_for(url, id_usuario=session.id)}} method="POST" class="shadow-lg"
+            <form action={{url_for(url, id_usuario=current_user.id)}} method="POST" class="shadow-lg"
             > 
             {% else %}
             <form action={{url_for(url)}} method="POST" class="shadow-lg"

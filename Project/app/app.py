@@ -103,10 +103,11 @@ def delete(e,k,v):
             #inicio INICIO
 @app.route("/inicio/")
 def view_inicio():
+    print(current_user.__dict__)
     articulos=Articulos.query.all()
     cat_list=Categorias.query.all()
     print(current_user.is_authenticated)
-    return render_template('inicio.html', articulos=articulos, Categorias=cat_list, current_user=current_user)
+    return render_template('inicio.html', articulos=articulos, Categorias=cat_list)
 
 #usado por opcion inicion para retornar una lista filtrada de articulos segun la categoria seleccionada
 @app.route("/inicio/filterby/categoria/<int:cid>")

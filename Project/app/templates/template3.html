@@ -9,7 +9,9 @@
       <th scope="col">#</th>
       <th scope="col">categoria</th>
       <th scope="col">id</th>
+      {% if current_user.is_authenticated and current_user.is_admin() %}
       <th scope="col">modificar</th>
+      {% endif %}
     </tr>
   </thead>
   <tbody>
@@ -18,7 +20,9 @@
       <th scope="row"></th>
         <td>{{e.nombre}}</td>
         <td>{{e.id}}</td>
+        {% if current_user.is_authenticated and current_user.is_admin() %}
         <td><a href="{{url_for('delete_categoria',id=e.id )}}">delete</a></td>
+        {% endif %}
 
     </tr>
     {% endfor %}

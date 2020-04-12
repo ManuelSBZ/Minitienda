@@ -26,20 +26,20 @@
       <ul class="nav col">
         <li class="nav-item"><a href={{url_for("view_inicio")}} class="nav-link active"><button class="btn btn-dark">Inicio</button></a></li>
         <li class="nav-item"><a href={{url_for("view_categorias")}} class="nav-link active"><button class="btn btn-dark">Categorias</button></a></li>
-        {% if session["admin"]%}
+        {% if current_user.is_authenticated and current_user.is_admin() %}
         <li class="nav-item"><a href={{url_for("create_form")}} class="nav-link active"><button class="btn btn-dark">Añadir Articulo</button></a></li>
         <li class="nav-item"><a href={{url_for("create_cat")}} class="nav-link active"><button class="btn btn-dark">Añadir Categoria</button></a></li>
         {% endif %}
-        {% if session["id"]%}
+        {% if current_user.is_authenticated%}
         <li class="nav-item pt-2 d-flex ml-auto">
           <div class="btn-group dropright">
           <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            usuario: {{session["username"]}}
+            usuario: {{current_user.username}}
           </button>
           <div class="dropdown-menu">
             <a href={{url_for('log_out')}} class="nav-link active">logout</a>
-            <a href="{{url_for('editar_perfil',id_usuario=session.id)}}" class="nav-link active">Cambiar datos de Perfil</a>
-            <a href="{{url_for('editar_contraseña',id_usuario=session.id)}}" class="nav-link active">Cambiar contraseña</a>
+            <a href="{{url_for('editar_perfil',id_usuario=current_user.id)}}" class="nav-link active">Cambiar datos de Perfil</a>
+            <a href="{{url_for('editar_contraseña',id_usuario=current_user.id)}}" class="nav-link active">Cambiar contraseña</a>
           </div>
         </div></li>
         {% else%}

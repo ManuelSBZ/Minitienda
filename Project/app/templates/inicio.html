@@ -62,7 +62,7 @@
               <td>{{e.categoria.nombre}}</td>
               <td>{{e.CategoriaId}}</td>
               <!-- agregado -->
-              {% if session["admin"]%}
+              {% if current_user.is_authenticated and current_user.is_admin() %}
               <td>
                 <a href="{{url_for('update_form')}}?id={{e.id}}" > <button class="bg-dark text-white">modificar</button>
                 </a>
@@ -72,7 +72,7 @@
                 <a href="{{url_for('delete_articulo',id=e.id)}}"><button class="bg-dark text-white">borrar</button></a>
               </td>
               {% endif %}
-              {% if session["id"]%}
+              {% if current_user.is_authenticated%}
               <td>
                 <a href=#><button class="bg-dark text-white">Comprar</button></a>
               </td>

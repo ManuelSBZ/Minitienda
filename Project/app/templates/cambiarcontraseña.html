@@ -7,7 +7,7 @@
 <div class="container">
     <div class="row">
         <div class="col-8 p-5 pr-5 pd-5">
-            <form action="{{url_for('editar_contraseña', id_usuario=session.id)}}" method="POST" class="shadow-lg">
+            <form action="{{url_for('editar_contraseña', id_usuario=current_user.id)}}" method="POST" class="shadow-lg">
                 {{form.csrf_token()}}
                 <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">
 
