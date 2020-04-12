@@ -344,7 +344,7 @@ def signin():
 # login
 @app.route("/login/", methods=['GET','POST'])
 def log_in():
-    
+
     if current_user.is_authenticated:
         abort(404, "ya esta logueado")
     
@@ -357,8 +357,10 @@ def log_in():
             return render_template("login.html", form =form, url='log_in')
         print(form.data)
         if usuario.verify_password(form.password.data):
+            print("LOGUEADO?")
             login_user(usuario)
-            return redirect(url_for("view_inicio"))
+            print(f"RESPUESTA:{current_user.is_authenticated}")
+            return redirect(url_for("view_categorias"))
         else:
             form.password.errors.append("Contraseña incorrecta, por favor intente de nuevo")
     return render_template("login.html", form =form, url='log_in')
@@ -366,7 +368,6 @@ def log_in():
 @app.route("/logout/", methods=['GET','POST'])
 
 def log_out():
-    user=Usuarios.query
     logout_user()
     return redirect(url_for("view_inicio"))
 
