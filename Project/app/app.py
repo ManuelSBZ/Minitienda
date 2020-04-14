@@ -359,13 +359,13 @@ def log_in():
             return render_template("login.html", form =form, url='log_in')
         print(form.data)
         if usuario.verify_password(form.password.data):
-            print("LOGUEADO?")
+            #crea la session de usuario con los datos del usuario y carga con info del usuario a @login_manager.userloader 
             login_user(usuario)
-            print(f"RESPUESTA:{current_user.is_authenticated}")
-            return redirect(url_for("view_inicio"))
+            next=request.args.get('next')
+            return redirect(next or url_for("view_inicio"))
         else:
             form.password.errors.append("Contraseña incorrecta, por favor intente de nuevo")
-    return render_template("login.html", form =form, url='log_in')
+    return render_template("login.html", form =form, url= 'log_in')
 
 @app.route("/logout/", methods=['GET','POST'])
 
@@ -402,8 +402,8 @@ def editar_perfil(id_usuario):
 def editar_contraseña(id_usuario):
     form=CambiarContraseña()
     usuario=Usuarios.query.get(id_usuario)
-    if usuario is None:
-        abort(404, "usuario no existe")
+    if usuario.id != current_user.id:
+        abort(404, "usuario no coincide")
     if form.validate_on_submit():
         data_form={key:value 
                     for k in Usuarios.__dict__.keys() for key,value in form.data.items() if key==k}

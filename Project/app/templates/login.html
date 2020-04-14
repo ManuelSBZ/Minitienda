@@ -8,7 +8,8 @@
     <div class="row">
         <div class="col-6 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
-            <form action={{url_for(url)}} method="POST" class="shadow-lg"
+            <!-- se elimino el action -->
+            <form method="POST" class="shadow-lg"
             >   
                 {% if existe%}
                 <div class="container rounded bg-danger mb-3">
