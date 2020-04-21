@@ -43,8 +43,17 @@ class SigninForm(FlaskForm):
     nombre=StringField("nombre",validators=[DataRequired("Usuario Incorrecto")])
     email=StringField("Email",validators=[Email(message="Por favor introduzca un email valido")])
     submit=SubmitField("Submit")
-    
+
+# acoplado con app principal por choices
 class CambiarContraseña(FlaskForm):
     password=PasswordField("Contraseña", validators=[DataRequired(),Length(10,message="minimo 10 caracteres")])
     cpassword=PasswordField("Repita contraseña", validators=[DataRequired(),EqualTo(fieldname='password',message="las contraseñas no coinciden")])
+    CategoriaId=SelectField("Categoria",
+                            choices=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()])
     submit=SubmitField("Submit")
+
+class Carrito(FlaskForm):
+    cantidad=SelectField("Cantidad" , coerce=int)
+    submit=SubmitField("Submit")
+
+                            

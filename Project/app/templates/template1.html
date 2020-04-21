@@ -40,8 +40,10 @@
             <a href={{url_for('log_out')}} class="nav-link active">logout</a>
             <a href="{{url_for('editar_perfil',id_usuario=current_user.id)}}" class="nav-link active">Cambiar datos de Perfil</a>
             <a href="{{url_for('editar_contraseña',id_usuario=current_user.id)}}" class="nav-link active">Cambiar contraseña</a>
+            <a href="{{url_for('carro')}}" class="nav-link active">Carrito</a>
           </div>
         </div></li>
+        <li class="nav-item"> <a href="{{url_for('carro')}}" class="nav-link"><button class="btn btn-dark"> Carrito <span class="badge">{{cantidad_juegos}}</span></button></a></li>
         {% else%}
         <li class="nav-item d-flex ml-auto"><a href={{url_for('signin')}} class="nav-link active"><button class="btn btn-dark ">Sign in</button></a></li>
         <li class="nav-item d-flex"><a href={{url_for('log_in')}} class="nav-link active"><button class="btn btn-dark ">Login</button></a></li>

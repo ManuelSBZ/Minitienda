@@ -1,0 +1,21 @@
+{% extends "template1.html" %}
+
+{% block title %} Carrito {% endblock %}
+
+{% block content %}
+
+<form method="POST">
+    <div class="form-wraper bg-dark">
+        {{form.csrf_token()}}
+        <div class="form-group">
+            {{form.cantidad.label()}}
+            {{form.cantidad()}}
+        </div>
+        <div class="form-col">
+            {{form.submit.label()}}
+            {{form.submit(class="form-control")}}
+        </div>
+    
+</form>
+
+{% endblock%}

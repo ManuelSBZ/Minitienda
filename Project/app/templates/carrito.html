@@ -1,0 +1,50 @@
+{% extends "template1.html" %}
+{% block title %}Carrito{% endblock %}
+
+
+{% block content %}
+<table class="table mt-2">
+  <thead>
+    <tr>
+      <th scope="col">Articulo</th>
+      <th scope="col">Precio</th>
+      <th scope="col">Cantidad</th>
+      <th scope="col">Precio total</th>
+      <th scope="col">Eliminar</th>
+    </tr>
+  </thead>
+  <tbody>
+
+
+    {% if cookie%}
+
+    {% for juego in cookie %}
+    <tr>
+      {% for key,value in juego.items()%}
+      {%if key != "id" %}
+      <td>{{value}}</td>
+      {% endif %}
+      {% endfor %}
+      <td><a href="{{url_for('carro_delete', id=juego.id)}}">Eliminar</a></td>
+
+    </tr>
+    {% endfor %}
+    {% else %}
+    <td>
+      <h3>No hay articulos en el Carrito</h3>
+    </td>
+
+    {% endif %}
+
+  </tbody>
+</table>
+{% if precio != 0 %}
+<div class="container-fluid pl-2">
+  <div class="row">
+    <div class="col d-flex justify-content-start">
+      <h4>Pago total= {{precio}}</h4>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

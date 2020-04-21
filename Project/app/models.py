@@ -23,6 +23,11 @@ class Articulos(db.Model):
     stock=Column(Integer,default=0)
     CategoriaId = Column(Integer, ForeignKey('Categorias.id'), nullable=False)
     #padre= object class Categorias
+    def precio_con_iva(self):
+        preciofinal= self.precio*((self.iva/100)+1)
+        return preciofinal
+        
+
 
 class Usuarios(db.Model):
     __tablename__="Usuarios"

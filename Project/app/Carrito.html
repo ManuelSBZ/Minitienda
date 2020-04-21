@@ -1,0 +1,32 @@
+{% extends "template1.html" %}
+{% block title %}Inicio{% endblock %}
+
+
+{% block content %}
+<table class="table bg-dark">
+<thead>
+    <tr>
+      <th class="col">#</th>
+      <th class="col">articulo</th>
+      <th class="col">id</th>
+      {% if current_user.is_authenticated and current_user.is_admin() %}
+      <th class="col">modificar</th>
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in Articulos: %}    
+    <tr>
+      <th class="row"></th>
+        <td>{{e.nombre}}</td>
+        <td>{{e.precio}}</td>
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+        <td><a href="{{url_for('delete_categoria',id=e.id )}}">delete</a></td>
+        {% endif %}
+
+    </tr>
+    {% endfor %}
+    </tr>
+  </tbody>
+</table>
+{% endblock %}
