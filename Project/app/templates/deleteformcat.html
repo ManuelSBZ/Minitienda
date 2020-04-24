@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-8 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
             <form action="{{url_for('delete_categoria',id=cat.id)}}" method="POST" class="shadow-lg">

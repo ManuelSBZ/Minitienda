@@ -5,7 +5,7 @@
 {% block content %}
 <!-- TEMPLATE USADO PARA CREATE, UPDATE -->
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-6 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
             <form action={% if request.args %}"{{url_for('update_form')}}?id={{juego.id}}"

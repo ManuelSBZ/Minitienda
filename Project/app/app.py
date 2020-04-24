@@ -417,6 +417,9 @@ def editar_contraseña(id_usuario):
         return redirect(url_for("view_inicio"))
     return render_template("cambiarcontraseña.html", form=form)
 
+#COOKIES 
+
+# SETEA COOKIES DE PRUEBA(CARACTER DIDACTICO)
 @app.route("/SetCookies")
 def set_cookies():
     art=Articulos.query.get(1)
@@ -427,6 +430,7 @@ def set_cookies():
     response.set_cookie("1",content)
     return response
 
+# VER Y ELIMINAR COOKIES
 @app.route("/SeeCookies")
 @app.route("/DeleteCookies")
 def see_cookies():
@@ -456,27 +460,37 @@ def see_cookies():
 #     response.set_cookie("articulos",json.dumps([{"art2":"XBOX 360"},{"art1":"1TRILLION DOLLARS"}]))
 #     return response
 
+# COOKIES DE LA APLICACION CARRITO
+
+
+# operación comprar en la pagina de inicio. crea cookie de usuario con articulos
 @app.route("/add/articulo/<int:id>", methods=["POST","GET"])
 @login_required
 def comprar(id):
+
+    # para pintar el formulario
     form=Carrito()
+
+    #para traer datos del articulo seleccionado
     art=Articulos.query.get(id)
+
     # se asignan las opciones dinamicas segun el numero de stock (SelectField)
     lista_cantidad=[(a,f"{a}") for a in range(art.stock + 1)]
     form.cantidad.choices=lista_cantidad
     form.cantidad.choices.pop(0)
+
     if form.validate_on_submit():
         # validadndo cantidad vs stock disponible
         
+        # se verifica si la cantidad de articulos solicitados para comprar no supera el stock en la tienda.
         if form.cantidad.data <=  art.stock:
             print("hay en stock")
-            # definicion del modelo de la cookie para el carrito
+            # definicion de la estructura de la cookie para el carrito.
             articulo_c=[{"nombre":art.nombre, "precio":art.precio, "cantidad":form.cantidad.data,
-                        "precio_total":art.precio_con_iva()*form.cantidad.data, "id":art.id}]
+                        "precio_total":round(art.precio_con_iva()*form.cantidad.data,2), "id":art.id}]
             print("added cookie")
             # cookie lista del usuario en str.
             cookie=request.cookies.get(str(current_user.id))
-            print(cookie)
             # lista de diccionarios articulos por usuario version objeto python.
             try:
                 cookie=json.loads(cookie)
@@ -524,7 +538,7 @@ def comprar(id):
                 response=app.make_response(redirect(url_for("view_inicio")))
                 response.set_cookie(f"{current_user.id}",content)
                 return response
-    return render_template("FormCarrito.html", form=form)
+    return render_template("FormCarrito.html", form=form,nombre=Articulos.query.get(id).nombre )
 
 @app.route("/inicio/carrito", methods=["GET","POST"])
 @login_required
@@ -534,7 +548,8 @@ def carro():
         cookie=json.loads(request.cookies.get(str(current_user.id)))
         precio=0
         for item in cookie:
-            precio=precio+item["precio_total"]
+            precio = round(precio+item["precio_total"], 2)
+            
     except:
         cookie=None
         precio=0
@@ -564,22 +579,49 @@ def carro_delete(id):
         return respuesta
     except:
         return redirect(url_for("carro")) 
+
+@app.route("/inicio/FinalizarPedido/", methods=["POST","GET"])
+@login_required
+def pedido():
+
+    try:
+        # lista de juegos del carrito del usuario.
+        print(1)
+        articulos_carrito= json.loads(request.cookies.get(str(current_user.id)))
+        #descuento de los juegos del carrito de los articulos en la pagina(base de datos)
+        print(2)
+        for articulo_carrito in articulos_carrito: 
+            print("hee")
+            Articulos.query.get(articulo_carrito["id"]).stock-=articulo_carrito["cantidad"]
+            db.session.commit()
+        print(3)
+        respuesta= app.make_response(render_template("pedido.html"))
+        respuesta.set_cookie(str(current_user.id),"",expires=0)
+        return respuesta           
+                    
+    except:
+        abort(404, "No hay pedido")
+
+# se envia a contexto el numero de articulos del usuario
 @app.context_processor
 def numero_articulos():
-    
-    try:
-        cantidad_juegos=0
-        print("PRIMER ESCALON")
-        cookie=json.loads(request.cookies.get(str(current_user.id)))
-        print(f"SEGUNDO ESCALON")
-        for juego in cookie:
-            cantidad_juegos=len(cookie)
+    if current_user.is_authenticated:
+        try:
+            cantidad_juegos=0
+            print("PRIMER ESCALON")
+            try:
+                cookie=json.loads(request.cookies.get(str(current_user.id)))
+                print(f"SEGUNDO ESCALON")
+                for fuego in cookie:
+                    cantidad_juegos=len(cookie)
+            except:
+                cantidad_juegos = 0 
         
-        return {"cantidad_juegos":cantidad_juegos}
-    except:
-        print("exceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeept")
-        return {"cantidad_juegos":"E0"}
-
+            return {"cantidad_juegos":cantidad_juegos}
+        except:
+            print("exceeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeept")
+            return {"cantidad_juegos":"E0"}
+    return {"cantidad_juegos":"E1"}
 @login_manager.user_loader
 def load_user(user_id):
     return Usuarios.query.get(int(user_id))

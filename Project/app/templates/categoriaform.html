@@ -5,16 +5,16 @@
 {% block content %}
 <!-- TEMPLATE USADO PARA CREATE, UPDATE -->
 <div class="container">
-    <div class="row">
+    <div class="row justify-content-center">
         <div class="col-8 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
-            <form action="{{url_for('create_cat')}}" method="POST" class="shadow-lg">
+            <form  method="POST" class="shadow-lg">
                 {{form.csrf_token()}}
                 <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">
 
                     <div class="row">
                         <div class="col-4">{{form.nombre.label}}</div>
-                        <div class="col-6">{{form.nombre(size="25")}}
+                        <div class="col-6">{{form.nombre(size="25", class="rounded-lg")}}
                             <!-- clase para comenza dentro de nueva linea -->
                             {%if form.errors%} 
                             {%for error in form.errors %}
