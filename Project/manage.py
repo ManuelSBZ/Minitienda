@@ -3,12 +3,14 @@ from app.app import app, db
 from app.models import Articulos,Categorias, Usuarios
 from getpass import getpass
 import os
-
+# Wrapper del app flask para usar meta comandos sobre este, tal como sigue adelante.
 instance_manager = Manager(app)
+
 # crea tablas basandose en los modelos en models.py
 @instance_manager.command
 def create_tables():
     "Create relational database tables."
+    #se genera la base de datos en el motor especificado y en la carpeta especificada en el config de la app flask
     db.create_all()	
 
 # elimina todas las tablas
@@ -76,6 +78,7 @@ def update_images():
     # se almacena todos los articulos en la tabla
     lista_articulos=Articulos.query.all()
 
+    # logica que actualiza todas las imagenes con coincidan con los juegos.
     for juego in lista_articulos:
         for imagen in lista_imagenes:
             print("segundo for")

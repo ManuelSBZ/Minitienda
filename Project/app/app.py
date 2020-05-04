@@ -8,10 +8,17 @@ import json
 import os
 import requests
 
+# wrapper app flask que contiene todos los atributos,  metodos y directrices para crear el proyecto segun las
+# especificaciones del framework.
 app = Flask(__name__)
+# se anexa la configuracion config.py en el objeto del proyecto
 app.config.from_pyfile("config.py")
+# wrapper del app obtject que da los metodos ORM para interactuar con la capa de datos
 db = SQLAlchemy(app)
+# wrapper para implementar sistema de autenticacion en app flask.
 login_manager=LoginManager(app)
+# seteando el wrapper para legueo con view del login. Su utilidad es para la redirecciones automaticas
+# a dicha vista.
 login_manager.login_view="log_in"
 
 Bootstrap(app) 
