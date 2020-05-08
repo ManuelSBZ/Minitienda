@@ -1,23 +1,32 @@
 from flask_script import Manager
-from app.app import app, db
-from app.models import Articulos,Categorias, Usuarios
+from app.app import app
+from app.models import *
 from getpass import getpass
 import os
 # Wrapper del app flask para usar meta comandos sobre este, tal como sigue adelante.
 instance_manager = Manager(app)
+app.config['DEBUG'] = True 
 
 # crea tablas basandose en los modelos en models.py
 @instance_manager.command
 def create_tables():
     "Create relational database tables."
     #se genera la base de datos en el motor especificado y en la carpeta especificada en el config de la app flask
-    db.create_all()	
+    db.create_all()
+    print("Esquema de datos creado")
 
 # elimina todas las tablas
 @instance_manager.command
 def drop_tables():
     "Drop all project relational database tables. THIS DELETES DATA."
     db.drop_all()
+    
+    print("Esquema de datos eliminado")
+@instance_manager.command
+def rollback():
+    "Drop all project relational database tables. THIS DELETES DATA."
+    db.session.rollback()
+    print("roll_back done")
 
 # agrega data de juegos en tablas
 @instance_manager.command

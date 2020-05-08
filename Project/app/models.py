@@ -10,7 +10,8 @@ class Categorias(db.Model):
     #Primary key como atributo
     id=Column(Integer, primary_key=True)
     nombre=Column(String(100), nullable=False)
-    articulo=relationship("Articulos",backref="categoria")
+    articulo=relationship("Articulos",backref="categoria", cascade="all, delete-orphan",
+                             lazy='dynamic')
 
 class Articulos(db.Model):
     __tablename__="Articulos"

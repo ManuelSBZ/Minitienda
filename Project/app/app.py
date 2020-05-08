@@ -7,14 +7,16 @@ from flask_login import LoginManager,login_user,logout_user,current_user, login_
 import json
 import os
 import requests
-
 # wrapper app flask que contiene todos los atributos,  metodos y directrices para crear el proyecto segun las
 # especificaciones del framework.
 app = Flask(__name__)
+
 # se anexa la configuracion config.py en el objeto del proyecto
 app.config.from_pyfile("config.py")
+
 # wrapper del app obtject que da los metodos ORM para interactuar con la capa de datos
 db = SQLAlchemy(app)
+
 # wrapper para implementar sistema de autenticacion en app flask.
 login_manager=LoginManager(app)
 # seteando el wrapper para legueo con view del login. Su utilidad es para la redirecciones automaticas
@@ -25,6 +27,7 @@ Bootstrap(app)
 
 from forms import CreateForm,CreateCat,DeleteForm,SigninForm, LoginForm, CambiarContraseña, Carrito
 from app.models import Articulos,Categorias,Usuarios
+
 
 
 # FILTRA ARTICULOS POR CATEGORIA MEDIANTE EL ID CATEGORIA (SOLO PRUEBA)
@@ -144,10 +147,16 @@ def filter_articulos(cid):
 @app.route("/inicio/create/form/", methods=["GET","POST"])
 @login_required
 def create_form():
+    print("CONTROLADOR: CREATE_FORM")
     if not current_user.is_admin():
         abort(404, "no es admin, no tiene permiso")
     # instancio el formulario
     form=CreateForm()
+
+    # se asignan las opciones dinamicas
+    seleccion_cat=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()]
+    form.CategoriaId.choices=seleccion_cat
+
     # verifico la informacion enviada segun lo estipulado en tipos de campos y validadores
     if form.validate_on_submit():
         # álmaceno la informaion enviada por este formulario en forma dict
@@ -235,6 +244,11 @@ def update_form():
     id=request.args.get("id")
     juego=Articulos.query.get(id)
     form=CreateForm(obj=juego)
+
+    # se asignan las opciones dinamicas
+    seleccion_cat=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()]
+    form.CategoriaId.choices=seleccion_cat
+
     
     if form.validate_on_submit() and request.method=="POST":
         if form.imagen.data:

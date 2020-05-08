@@ -17,8 +17,7 @@ class CreateForm(FlaskForm):
                             ,DataRequired("Este es un campo requerido")])
     # iva=IntegerField("Iva",validators=[DataRequired("Este es un campo requerido")])
     
-    CategoriaId=SelectField("Categoria",
-                            choices=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()])
+    CategoriaId=SelectField("Categoria")
     imagen=FileField("Imagen")
 
     submit=SubmitField("Submit")
@@ -48,8 +47,6 @@ class SigninForm(FlaskForm):
 class CambiarContraseña(FlaskForm):
     password=PasswordField("Contraseña", validators=[DataRequired(),Length(10,message="minimo 10 caracteres")])
     cpassword=PasswordField("Repita contraseña", validators=[DataRequired(),EqualTo(fieldname='password',message="las contraseñas no coinciden")])
-    CategoriaId=SelectField("Categoria",
-                            choices=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()])
     submit=SubmitField("Submit")
 
 class Carrito(FlaskForm):

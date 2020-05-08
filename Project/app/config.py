@@ -8,7 +8,9 @@ DEBUG=True
 #para que funcione @login_required de Flask-Login
 # LOGIN_DISABLED=False
 
-SQLALCHEMY_DATABASE_URI ='sqlite:///{}/dbase.db'.format(PWD)
+# SQLALCHEMY_DATABASE_URI ='mysql+pymysql://msb:qwe@localhost/Minitienda?charset=utf8mb4'
+SQLALCHEMY_DATABASE_URI ='postgres://postgres:rareware@localhost/Minitienda'
+# SQLALCHEMY_DATABASE_URI ='sqlite:///{}/dbase.db'.format(PWD)
 # SQL_ALCHEMY_URI='sqlite:///C:/Users/Manuel/Desktop/Flask/Minitienda/Develop_env/Project/dbase.db'
 SQLALCHEMY_TRACK_MODIFICATIONS=False
 
