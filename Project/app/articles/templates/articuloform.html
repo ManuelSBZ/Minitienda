@@ -8,8 +8,8 @@
     <div class="row justify-content-center">
         <div class="col-6 p-5 pr-5 pd-5">
             <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
-            <form action={% if request.args %}"{{url_for('update_form')}}?id={{juego.id}}"
-                {% else %}'{{url_for("create_form")}}'{% endif %} method="POST" class="shadow-lg"
+            <form action={% if request.args %}"{{url_for('article.update_form')}}?id={{juego.id}}"
+                {% else %}'{{url_for("article.create_article")}}'{% endif %} method="POST" class="shadow-lg"
                 enctype="multipart/form-data">
                 {{form.csrf_token()}}
                 <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">

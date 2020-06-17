@@ -21,7 +21,7 @@
         <td>{{e.nombre}}</td>
         <td>{{e.id}}</td>
         {% if current_user.is_authenticated and current_user.is_admin() %}
-        <td><a href="{{url_for('delete_categoria',id=e.id )}}">delete</a></td>
+        <td><a href="{{url_for('category.delete_categoria',id=e.id )}}">delete</a></td>
         {% endif %}
 
     </tr>
