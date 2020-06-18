@@ -4,7 +4,7 @@ from flask import current_app, render_template,abort,request,redirect, url_for
 from flask_login import login_user,logout_user,current_user, login_required
 from .forms import CreateForm, DeleteForm
 from werkzeug.utils import secure_filename
-from ..app import db#sustituir por db en ext
+from ..ext import db#sustituir por db en ext
 import os
 
 # desacoplar loginmanager en ext 
@@ -56,7 +56,7 @@ def create_article():
         db.session.add(juego)
         db.session.commit()
         # print(f"objeto a enviar:{dt} \n \n objeto referencia:{Articulos.__dict__.keys()}")
-        return redirect(url_for("view_inicio"))
+        return redirect(url_for("main.view_inicio"))
     else:
         # form.categoria.choices=[(str(cat.id),cat.nombre) for cat in  Categorias.query.all()]
         return render_template("articuloform.html",form=form)
@@ -91,7 +91,7 @@ def update_form():
         Articulos.query.filter_by(id=id).update({a:b for a,b in form.data.items() if a != "submit" and a !="csrf_token" and a != "imagen"})
         juego.imagen=nombre_fichero
         db.session.commit()
-        return redirect(url_for("view_inicio"))
+        return redirect(url_for("main.view_inicio"))
     else:
         return render_template("articuloform.html" ,form=form, juego=juego,request=request )
 
@@ -106,7 +106,7 @@ def delete_articulo(id):
     form=DeleteForm()
     juego=Articulos.query.get(id)
     if juego==None:
-        return redirect(url_for("view_inicio"))
+        return redirect(url_for("main.view_inicio"))
     
     if form.validate_on_submit():
         if form.si.data==True:
@@ -115,7 +115,7 @@ def delete_articulo(id):
             db.session.commit()
             return render_template("eliminado.html", juego=juego)     
         else:
-            return redirect(url_for("view_inicio"))
+            return redirect(url_for("main.view_inicio"))
     
     return render_template("deleteformjuego.html",id=id,juego=juego, form=form)
 

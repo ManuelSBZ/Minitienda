@@ -3,13 +3,13 @@ from ..models import Usuarios
 from flask import current_app, render_template,abort,request,redirect, url_for
 from flask_login import login_user,logout_user,current_user, login_required
 from .forms import SigninForm,LoginForm, CambiarContraseña
-from ..app import db#sustituir por db en ext
+from ..ext import db#sustituir por db en ext
 
 
 @session_user.route("/signin/", methods=['GET','POST'])
 def signin():
     if current_user.is_authenticated:
-        return redirect(url_for("view_inicio"))
+        return redirect(url_for("main.view_inicio"))
 
     form= SigninForm()
     if form.validate_on_submit():
@@ -26,7 +26,7 @@ def signin():
             nuevo_usuario.admin=False
             db.session.add(nuevo_usuario)
             db.session.commit()
-            return redirect(url_for("view_inicio"))
+            return redirect(url_for("main.view_inicio"))
         else:
             print("usuario existe")
             existe=True
@@ -53,7 +53,7 @@ def log_in():
             login_user(usuario)
             # apunta a un controlador de un template que requiere estar logueado.
             next=request.args.get('next')
-            return redirect(next or url_for("view_inicio"))
+            return redirect(next or url_for("main.view_inicio"))
         else:
             form.password.errors.append("Contraseña incorrecta, por favor intente de nuevo")
     return render_template("login.html", form =form, url= 'log_in')
@@ -61,7 +61,7 @@ def log_in():
 @session_user.route("/logout/", methods=['GET','POST'])
 def log_out():
     logout_user()
-    return redirect(url_for("view_inicio"))
+    return redirect(url_for("main.view_inicio"))
 
 @session_user.route("/editar/perfil/<int:id_usuario>", methods=["GET","POST"])
 @login_required
@@ -79,7 +79,7 @@ def editar_perfil(id_usuario):
             Usuarios.query.filter_by(id=id_usuario).update(data_form)
             db.session.commit()
             login_user(usuario)
-            return redirect(url_for('view_inicio'))
+            return redirect(url_for('main.view_inicio'))
         except:
             form.username.errors.append("username ya existente")
             
@@ -101,5 +101,5 @@ def editar_contraseña(id_usuario):
         # usuario=Usuarios.query.get(id_usuario)
         # form.populate_obj(usuario)
         db.session.commit()
-        return redirect(url_for("view_inicio"))
+        return redirect(url_for("main.view_inicio"))
     return render_template("cambiarcontraseña.html", form=form)

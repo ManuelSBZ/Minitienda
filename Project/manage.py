@@ -1,11 +1,12 @@
 from flask_script import Manager
-from app.app import app
+from app.ext import app
 from app.models import *
 from getpass import getpass
 import os
 # Wrapper del app flask para usar meta comandos sobre este, tal como sigue adelante.
 instance_manager = Manager(app)
-app.config['DEBUG'] = True 
+app.config['DEBUG'] = True
+# app.config['ENV']= "Development" 
 
 # crea tablas basandose en los modelos en models.py
 @instance_manager.command

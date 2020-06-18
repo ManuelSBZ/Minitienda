@@ -3,7 +3,7 @@ from ..models import Articulos,Categorias
 from flask import current_app, render_template,abort,request,redirect, url_for
 from flask_login import login_user,logout_user,current_user, login_required
 from .forms import CreateCat, DeleteForm
-from ..app import db#sustituir por db en ext
+from ..ext import db#sustituir por db en ext
 
 
 #MUESTRA CATEGORIAS 

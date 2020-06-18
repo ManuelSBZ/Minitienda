@@ -24,7 +24,7 @@
   <div class="container-fluid">
     <div class="row">
       <ul class="nav col">
-        <li class="nav-item"><a href={{url_for("view_inicio")}} class="nav-link active"><button class="btn btn-dark">Inicio</button></a></li>
+        <li class="nav-item"><a href={{url_for("main.view_inicio")}} class="nav-link active"><button class="btn btn-dark">Inicio</button></a></li>
         <li class="nav-item"><a href={{url_for("category.view_categorias")}} class="nav-link active"><button class="btn btn-dark">Categorias</button></a></li>
         {% if current_user.is_authenticated and current_user.is_admin() %}
         <li class="nav-item"><a href={{url_for("article.create_article")}} class="nav-link active"><button class="btn btn-dark">Añadir Articulo</button></a></li>
@@ -45,7 +45,7 @@
         </div></li>
         <li class="nav-item"> <a href="{{url_for('shopping_cart.carro')}}" class="nav-link"><button class="btn btn-dark"> Carrito <span class="badge">{{cantidad_juegos}}</span></button></a></li>
         {% else%}
-        <li class="nav-item d-flex ml-auto"><a href={{url_for('session_user.signin')}} class="nav-link active"><button class="btn btn-dark ">Sign in</button></a></li>
+        <li class="nav-item d-flex ml-auto"><a href={{url_for('session_user.signin')}} class="nav-link active"><button class="btn btn-dark ">Sign up</button></a></li>
         <li class="nav-item d-flex"><a href={{url_for('session_user.log_in')}} class="nav-link active"><button class="btn btn-dark ">Login</button></a></li>
         {% endif %}
       </ul>

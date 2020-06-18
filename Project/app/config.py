@@ -5,6 +5,7 @@ SECRET_KEY = 'A0Zr98j/3yX R~XHH!jmN]LWX/,?RT'
 PWD=os.getcwd()
 
 DEBUG=True
+ENV="Development"
 #para que funcione @login_required de Flask-Login
 # LOGIN_DISABLED=False
 

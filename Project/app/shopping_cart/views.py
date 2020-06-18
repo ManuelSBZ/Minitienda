@@ -4,7 +4,7 @@ from flask import current_app, render_template,abort,request,redirect, url_for
 import json
 from flask_login import login_user,logout_user,current_user, login_required
 from .forms import Carrito
-from ..app import db#sustituir por db en ext
+from ..ext import db#sustituir por db en ext
 
 # operación comprar en la pagina de inicio. crea cookie de usuario con articulos
 @shopping_cart.route("/add/articulo/<int:id>", methods=["POST","GET"])
@@ -61,7 +61,7 @@ def comprar(id):
                     cookie.extend(articulo_c)
                     art_json=json.dumps(cookie)
                     print(f"se agrega nueva cookie:{articulo_c[0]}")
-                    redirectx=current_app.make_response(redirect(url_for("view_inicio")))
+                    redirectx=current_app.make_response(redirect(url_for("main.view_inicio")))
                     redirectx.set_cookie(str(current_user.id),art_json)
                     return redirectx
                 # sino se sustituye el articulo repetido
@@ -71,7 +71,7 @@ def comprar(id):
                     cookie.insert(indice,articulo_c[0])
                     art_json=json.dumps(cookie)
                     print(f"sobrescribiendo con : {art_json}")
-                    redirectx=current_app.make_response(redirect(url_for("view_inicio")))
+                    redirectx=current_app.make_response(redirect(url_for("main.view_inicio")))
                     redirectx.set_cookie(str(current_user.id),art_json)
                     print(f"el response {redirectx}")
                     return redirectx
@@ -79,7 +79,7 @@ def comprar(id):
             else:
                 content=bytes(json.dumps(articulo_c), "UTF-8")
                 print("creando cookie")
-                response=current_app.make_response(redirect(url_for("view_inicio")))
+                response=current_app.make_response(redirect(url_for("main.view_inicio")))
                 response.set_cookie(f"{current_user.id}",content)
                 return response
     return render_template("FormCarrito.html", form=form,nombre=Articulos.query.get(id).nombre )
@@ -145,3 +145,23 @@ def pedido():
                     
     except:
         abort(404, "No hay pedido")
+
+
+# se envia a contexto el numero de articulos del usuario
+@shopping_cart.app_context_processor
+def numero_articulos():
+    if current_user.is_authenticated:
+        try:
+            cantidad_juegos=0
+            print("PRIMER ESCALON")
+            try:
+                cookie=json.loads(request.cookies.get(str(current_user.id)))
+                print(f"SEGUNDO ESCALON")
+                cantidad_juegos=len(cookie)
+            except:
+                cantidad_juegos = 0 
+        
+            return {"cantidad_juegos":cantidad_juegos}
+        except:
+            return {"cantidad_juegos":"E0"}
+    return {"cantidad_juegos":"E1"}
