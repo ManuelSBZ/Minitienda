@@ -1,0 +1,92 @@
+{% extends "template1.html" %}
+{% block title %}Inicio{% endblock %}
+
+
+{% block content %}
+<!-- container que contiene lista de nav filtro categoria y lista de juegos -->
+<div class="container-fluid mt-5">
+  <div class="row">
+
+    <!-- lista categorias -->
+    <div class="col-3">
+      <!-- contiene lista de filtro por categorias-->
+      <div class="bg-dark rounded shadow">
+        <table class="table table-hover">
+          <tbody>
+            {% for a in Categorias %}
+            {% if cat_selec and cat_selec.nombre==a.nombre %}
+            <tr>
+              <td><a href={{url_for('article.filter_articulos', cid=a.id)}} 
+                class="text-decoration-none text-white list-group-item active"> {{a.nombre}} </a></td>
+            </tr>
+            {% else %}
+            <tr>
+              <td><a href={{url_for('article.filter_articulos', cid=a.id)}} 
+                class="text-decoration-none text-white"> {{a.nombre}} </a></td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+
+
+    <!-- lista juegos -->
+    <div class="col-9">
+      <div class="bg-dark rounded shadow">
+        <table class="table text-white">
+          <thead>
+            <tr>
+              <!-- ENCABEZADOS DE LISTA -->
+              <th scope="col"></th>
+              <th scope="col">Videojuego</th>
+              <th scope="col">precio</th>
+              <th scope="col">iva</th>
+              <th scope="col">Categoria</th>
+              <th scope="col">CategoriaId</th>
+            </tr>
+          </thead>
+
+          <!-- ITEMS -->
+          <tbody>
+            {% for e in articulos: %}
+            <tr>
+
+              <td><img src="{{url_for('static',filename='upload/')}}{{e.imagen}}" alt="imagen juego" 
+                style="width: 100px;"></td> 
+              <td>{{e.nombre}}</td>
+              <td>{{e.precio}}</td>
+              <td>{{e.iva}}</td>
+              <td>{{e.categoria.nombre}}</td>
+              <td>{{e.CategoriaId}}</td>
+              <!-- agregado -->
+              {% if current_user.is_authenticated and current_user.is_admin() %}
+              <td>
+                <a href="{{url_for('article.update_form')}}?id={{e.id}}" > <button class="bg-dark text-white">modificar</button>
+                </a>
+                <!-- <input class="rounded bg-primary" type="submit" name="modificar" value="modificar" ria-label="modificar"></a> -->
+              </td>
+              <td>
+                <a href="{{url_for('article.delete_articulo',id=e.id)}}"><button class="bg-dark text-white">borrar</button></a>
+              </td>
+              {% endif %}
+              {% if current_user.is_authenticated%}
+              <td>
+                <a href="{{url_for('shopping_cart.comprar', id=e.id)}}"><button class="bg-dark text-white">Comprar</button></a>
+              </td>
+              {% endif%}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+{% endblock %}

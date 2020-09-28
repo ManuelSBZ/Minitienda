@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+  <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body>
+  <div class="container-fluid bg-danger shadow">
+    <div class="row justify-content-center text-dark">
+      <div class="col-8 d-flex justify-content-center title" style="background-color: rgb(29, 35, 68);">
+        <h1 class="text-white">GameXL</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row">
+      <ul class="nav col">
+        <li class="nav-item"><a href={{url_for("main.view_inicio")}} class="nav-link active"><button class="btn btn-dark">Inicio</button></a></li>
+        <li class="nav-item"><a href={{url_for("category.view_categorias")}} class="nav-link active"><button class="btn btn-dark">Categorias</button></a></li>
+        {% if current_user.is_authenticated and current_user.is_admin() %}
+        <li class="nav-item"><a href={{url_for("article.create_article")}} class="nav-link active"><button class="btn btn-dark">Añadir Articulo</button></a></li>
+        <li class="nav-item"><a href={{url_for("category.create_cat")}} class="nav-link active"><button class="btn btn-dark">Añadir Categoria</button></a></li>
+        {% endif %}
+        {% if current_user.is_authenticated%}
+        <li class="nav-item pt-2 d-flex ml-auto">
+          <div class="btn-group dropright">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            usuario: {{current_user.username}}
+          </button>
+          <div class="dropdown-menu">
+            <a href="{{url_for('session_user.log_out')}}" class="nav-link active">logout</a>
+            <a href="{{url_for('session_user.editar_perfil',id_usuario=current_user.id)}}" class="nav-link active">Cambiar datos de Perfil</a>
+            <a href="{{url_for('session_user.editar_contraseña',id_usuario=current_user.id)}}" class="nav-link active">Cambiar contraseña</a>
+            <a href="{{url_for('shopping_cart.carro')}}" class="nav-link active">Carrito</a>
+          </div>
+        </div></li>
+        <li class="nav-item"> <a href="{{url_for('shopping_cart.carro')}}" class="nav-link"><button class="btn btn-dark"> Carrito <span class="badge">{{cantidad_juegos}}</span></button></a></li>
+        {% else%}
+        <li class="nav-item d-flex ml-auto"><a href={{url_for('session_user.signin')}} class="nav-link active"><button class="btn btn-dark ">Sign up</button></a></li>
+        <li class="nav-item d-flex"><a href={{url_for('session_user.log_in')}} class="nav-link active"><button class="btn btn-dark ">Login</button></a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+  {% block content %}{% endblock %}
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

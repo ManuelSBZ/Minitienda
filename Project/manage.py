@@ -1,5 +1,5 @@
 from flask_script import Manager
-from app.ext import app
+from entrypoint import app
 from app.models import *
 from getpass import getpass
 import os
