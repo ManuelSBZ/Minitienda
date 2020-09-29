@@ -8,7 +8,7 @@ Aplicación web Flask bajo arquitectura MVC
   5. docker
   
 El presente proyecto anexa una tienda que fue diseñada con finalidades didacticas con el fin de ejercitar conceptos del patron de diseño mvc.
-El concepto de la pagina web es una ecommerce con funciones basicas como Signup , login , carrito (usando cookies), cambio de informacion del perfil, agregar articulo, comprar(simulado), filtrado basico por categoria. 
+El concepto de la pagina web es una ecommerce con funciones basicas como Signup , login , carrito (usando cookies), cambio de informacion del perfil, agregar articulo, comprar(simulado), filtrado de articulos por categoria. 
 
 - Para explorar la solucion se debe:
   1. Clonar el repositorio.
