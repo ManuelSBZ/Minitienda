@@ -1,21 +1,33 @@
 from flask_script import Manager
-from app.app import app, db
-from app.models import Articulos,Categorias, Usuarios
+from entrypoint import app
+from app.models import *
 from getpass import getpass
 import os
-
+# Wrapper del app flask para usar meta comandos sobre este, tal como sigue adelante.
 instance_manager = Manager(app)
+app.config['DEBUG'] = True
+# app.config['ENV']= "Development" 
+
 # crea tablas basandose en los modelos en models.py
 @instance_manager.command
 def create_tables():
     "Create relational database tables."
-    db.create_all()	
+    #se genera la base de datos en el motor especificado y en la carpeta especificada en el config de la app flask
+    db.create_all()
+    print("Esquema de datos creado")
 
 # elimina todas las tablas
 @instance_manager.command
 def drop_tables():
     "Drop all project relational database tables. THIS DELETES DATA."
     db.drop_all()
+    
+    print("Esquema de datos eliminado")
+@instance_manager.command
+def rollback():
+    "Drop all project relational database tables. THIS DELETES DATA."
+    db.session.rollback()
+    print("roll_back done")
 
 # agrega data de juegos en tablas
 @instance_manager.command
@@ -76,6 +88,7 @@ def update_images():
     # se almacena todos los articulos en la tabla
     lista_articulos=Articulos.query.all()
 
+    # logica que actualiza todas las imagenes con coincidan con los juegos.
     for juego in lista_articulos:
         for imagen in lista_imagenes:
             print("segundo for")

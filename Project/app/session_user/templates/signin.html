@@ -1,0 +1,127 @@
+{% extends "template1.html" %}
+{% block title %}Create{% endblock %}
+
+
+{% block content %}
+<!-- TEMPLATE USADO PARA CREATE, UPDATE -->
+<div class="container">
+    <div class="row">
+        <div class="col-6 p-5 pr-5 pd-5">
+            <!-- se implemento un if en atributo action para discriminar los metodos update y create -->
+            {% if editar%}
+            <form action={{url_for(url, id_usuario=current_user.id)}} method="POST" class="shadow-lg"
+            > 
+            {% else %}
+            <form action={{url_for(url)}} method="POST" class="shadow-lg"
+            >   
+            {% endif %}
+                {% if existe%}
+                <div class="container rounded bg-danger mb-3">
+                    <div class="row d-flex align-items-center pl-2">
+                            <span class="text-white">El usuario ya existe</span>
+                    </div>
+                </div>
+                {%endif%}
+                {{form.csrf_token()}}
+                <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">
+
+                    <div class="row">
+                        <div class="col-4">{{form.username.label()}}</div>
+                        <div class="col-6"> {{form.username( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.username.errors %}
+                            {% for error in form.username.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-4">{{form.nombre.label()}}</div>
+                        <div class="col-6"> {{form.nombre( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.nombre.errors %}
+                            {% for error in form.nombre.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    {% if editar == Null %}
+                    <div class="row">
+                        <div class="col-4">{{form.password.label()}}</div>
+                        <div class="col-6"> {{form.password( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    
+                    <div class="row">
+                        <div class="col-4">{{form.cpassword.label()}}</div>
+                        <div class="col-6"> {{form.cpassword( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.cpassword.errors%}
+                            {% for error in form.cpassword.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    {% endif%}
+                    <div class="row">
+                        <div class="col-4">{{form.email.label()}}</div>
+                        <div class="col-6"> {{form.email( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.email.errors %}
+                            {% for error in form.email.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-2 dflex justify-content-start">{{form.submit()}}</div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

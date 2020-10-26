@@ -1,6 +1,6 @@
 from sqlalchemy import String,Integer,Boolean,Float,ForeignKey, Column
 from sqlalchemy.orm import relationship
-from app.app import db
+from .ext import db
 from werkzeug.security import generate_password_hash, check_password_hash
 
 
@@ -10,7 +10,8 @@ class Categorias(db.Model):
     #Primary key como atributo
     id=Column(Integer, primary_key=True)
     nombre=Column(String(100), nullable=False)
-    articulo=relationship("Articulos",backref="categoria")
+    articulo=relationship("Articulos",backref="categoria", cascade="all, delete-orphan",
+                             lazy='dynamic')
 
 class Articulos(db.Model):
     __tablename__="Articulos"
@@ -23,6 +24,11 @@ class Articulos(db.Model):
     stock=Column(Integer,default=0)
     CategoriaId = Column(Integer, ForeignKey('Categorias.id'), nullable=False)
     #padre= object class Categorias
+    def precio_con_iva(self):
+        preciofinal= self.precio*((self.iva/100)+1)
+        return preciofinal
+        
+
 
 class Usuarios(db.Model):
     __tablename__="Usuarios"
@@ -44,6 +50,23 @@ class Usuarios(db.Model):
 
     def verify_password(self, password):
         return check_password_hash(self.password_hash,password)
+    
+    #Requisito en el modelo usuario para integrar con Flask-Login
+    @property
+    def is_authenticated(self):
+        return True 
+    @property
+    def is_anonymous(self):
+        return False
+    @property
+    def is_active(self):
+        return True
+    #metodo requisito
+    def get_id(self):
+        return self.id
+    #extra, NO requisito para Flask login
+    def is_admin(self):
+        return self.admin
 
 
 

@@ -1,0 +1,62 @@
+{% extends "template1.html" %}
+{% block title %}Inicio{% endblock %}
+
+
+{% block content %}
+<!-- TEMPLATE USADO PARA CREATE, UPDATE -->
+<div class="container">
+    <div class="row">
+        <div class="col-8 p-5 pr-5 pd-5">
+            <form method="POST" class="shadow-lg">
+                {{form.csrf_token()}}
+                <div class="container bg-dark text-white p-3 pr-3 pd-3 rounded">
+
+                    <div class="row">
+                        <div class="col-4">{{form.password.label()}}</div>
+                        <div class="col-6"> {{form.password( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.password.errors %}
+                            {% for error in form.password.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    
+                    <div class="row">
+                        <div class="col-4">{{form.cpassword.label()}}</div>
+                        <div class="col-6"> {{form.cpassword( 
+                                            size="25",
+                                            class="form-control")}}
+                            {% if form.cpassword.errors%}
+                            {% for error in form.cpassword.errors %}
+                            <!-- clase para comenza dentro de nueva linea -->
+                            <div class="w-100"></div>
+                            <!-- trampita para que el error este alineado al input(pl-0) -->
+                            <div class="col pl-0">
+                                {{error}}
+                            </div>
+                            {% endfor %}
+                            {% endif%}
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-12 d-flex justify-content-end">{{form.submit()}}
+                            <!-- clase para comenza dentro de nueva linea -->
+                        </div>
+                    </div>
+                    
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

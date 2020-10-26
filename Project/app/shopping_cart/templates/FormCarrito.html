@@ -1,0 +1,30 @@
+{% extends "template1.html" %}
+
+{% block title %} Carrito {% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="col bg-dark text-white p-5 rounded-lg mt-4">
+            <h1 class="title d-flex justify-content-center" style="width:100%;">Agregar al Carrito: {{nombre}}</h1>
+            
+            <form method="POST">
+
+                {{form.csrf_token()}}
+                <div class="form-group">
+                    {{form.cantidad.label()}}
+                    {{form.cantidad(class='form-control')}}
+                    <small id="helpcantidad" class="form-text text-muted">Seleccione la cantidad</small>
+                </div>
+
+                <div class="form-group">
+                    {{form.submit.label()}}
+                    {{form.submit(class="form-control")}}
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock%}
